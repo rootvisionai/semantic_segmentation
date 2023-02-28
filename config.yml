@@ -1,0 +1,78 @@
+model:
+  arch: "UNetResnet" # DeepLabX, DeepLab, UNetResnet, UNet
+  num_classes: 10
+  in_channels: 3
+  backbone: "resnet50" # resnet18, resnet34, resnet50, resnet101
+  output_stride: 16
+  freeze_bn: False
+  freeze_backbone: False
+
+data:
+  dataset: "wood_defect"
+  input_size: 256
+  augmentations:
+
+    ShiftScaleRotate:
+      shift_limit: 0.1
+      scale_limit: 0.1
+      rotate_limit: 30
+      probability: 0.2
+
+    RGBShift:
+      r_shift_limit: 25
+      g_shift_limit: 25
+      b_shift_limit: 25
+      probability: 0.2
+
+    RandomBrightnessContrast:
+      brightness_limit: 0.3
+      contrast_limit: 0.3
+      probability: 0.2
+
+training:
+  optimizer: "AdamW"
+  criterion: 'CrossEntropyDiceLoss' # CrossEntropyLoss2d | DiceLoss | FocalLoss | CrossEntropyDiceLoss
+  epochs: 500
+  batch_size: 16
+  learning_rate: 0.0001
+  device: "cuda"
+  num_workers: 6
+
+# Guidance for models' configuration
+
+#  model = UNet(
+#      num_classes=cfg.model.num_classes,
+#      in_channels=3,
+#      freeze_bn=cfg.model.freeze_bn
+#  )
+
+#  model = UNetResnet(
+#      num_classes=cfg.model.num_classes,
+#      in_channels=3,
+#      backbone=cfg.model.backbone,
+#      pretrained=True,
+#      freeze_bn=cfg.model.freeze_bn,
+#      freeze_backbone=cfg.model.freeze_backbone
+#  )
+
+#  model = DeepLab(
+#      num_classes=cfg.model.num_classes,
+#      in_channels=3,
+#      backbone=cfg.model.backbone,
+#      pretrained=True,
+#      output_stride=cfg.model.output_stride,
+#      freeze_bn=cfg.model.freeze_bn,
+#      freeze_backbone=cfg.model.freeze_backbone
+#  )
+
+#  model = DeepLabX(
+#      num_classes=cfg.model.num_classes,
+#      in_channels=3,
+#      backbone=cfg.model.backbone,
+#      pretrained=True,
+#      output_stride=cfg.model.output_stride,
+#      freeze_bn=cfg.model.freeze_bn,
+#      freeze_backbone=cfg.model.freeze_backbone
+#  )
+
+
