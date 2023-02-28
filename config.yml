@@ -8,6 +8,7 @@ model:
   freeze_backbone: False
 
 data:
+  folder_structure: "separate" # separate, unified
   dataset: "wood_defect"
   input_size: 256
   augmentations:

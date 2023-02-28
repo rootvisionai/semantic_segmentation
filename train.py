@@ -8,7 +8,6 @@ import shutil
 import sys
 
 import models
-from datasets.base import get_transforms, get_dataloader
 from utils import load_config
 import losses
 
@@ -22,7 +21,7 @@ def main(cfg):
     # get dataloaders
     transform_tr, transform_ev = get_transforms(cfg.data)
     dl_tr = get_dataloader(
-        root=os.path.join("datasets","wood_defect"),
+        root=os.path.join("datasets", cfg.data.dataset),
         set_type="train",
         transform=transform_tr,
         batch_size=cfg.training.batch_size,
@@ -32,7 +31,7 @@ def main(cfg):
         drop_last=True
     )
     dl_ev = get_dataloader(
-        root=os.path.join("datasets",cfg.data.dataset),
+        root=os.path.join("datasets", cfg.data.dataset),
         set_type="val",
         transform=transform_ev,
         batch_size=1,
@@ -93,7 +92,10 @@ def main(cfg):
         # visualize(model, dl_ev, device=cfg.training.device)
 
 if __name__ == "__main__":
+    # import config
     cfg = load_config("./config.yml")
+
+    # checkpoint
     checkpoint_dir = vars(cfg.model)
     checkpoint_dir = [f"{key}[{checkpoint_dir[key]}]" for key in checkpoint_dir]
     checkpoint_dir = "-".join(checkpoint_dir)
@@ -107,6 +109,13 @@ if __name__ == "__main__":
     else:
         last_epoch = 0
     shutil.copy("./config.yml", os.path.join(checkpoint_dir, "config.yml"))
+
+    if cfg.data.folder_structure == "separate":
+        from datasets.separate import get_transforms, get_dataloader
+    elif cfg.data.folder_structure == "unified":
+        from datasets.unified import get_transforms, get_dataloader
+    else:
+        raise NotImplementedError(f"cfg.data.folder_structure: {cfg.data.folder_structure} doesn't exist. Use one of separate, unified.")
 
     try:
         main(cfg)
