@@ -13,3 +13,7 @@ The model checkpoints will be saved to *checkpoints/* folder
 ![mask](./inference_examples/mask.png)
 #### Predicted Mask
 ![pred](./inference_examples/pred.png)
+
+### Planned
+#### Few-shot Inference
+![fewshot_segmentation_inference](fewshot_segmentation_inference.png)

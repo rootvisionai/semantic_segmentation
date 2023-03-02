@@ -2,6 +2,7 @@
 *.jpeg
 *.png
 !inference_examples/*.png
+!fewshot_segmentation_inference.png
 *.zip
 *.tar
 *.pt
