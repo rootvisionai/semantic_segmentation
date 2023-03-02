@@ -1,7 +1,7 @@
 *.jpg
 *.jpeg
 *.png
-!keep/*.png
+!inference_examples/*.png
 *.zip
 *.tar
 *.pt
@@ -17,3 +17,4 @@
 *.json
 !config/*.json
 *.onnx
+/fewshot_segmentation_inference.drawio

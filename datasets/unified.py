@@ -16,6 +16,7 @@ cv2.setNumThreads(0)
 cv2.ocl.setUseOpenCL(False)
 
 CLASSES = [
+    'background',
     'live_knot',
     'death_know',
     'knot_missing',
@@ -29,6 +30,7 @@ CLASSES = [
 ]
 
 COLORMAP_OLD = [
+    (0, 0, 0),
     (0, 255, 0),
     (255, 0, 0),
     (255, 100, 0),
@@ -42,6 +44,7 @@ COLORMAP_OLD = [
 ]
 
 COLORMAP_NEW = [
+    (0, 0, 0),
     (255, 0, 121),
     (101, 0, 255),
     (253, 255, 0),

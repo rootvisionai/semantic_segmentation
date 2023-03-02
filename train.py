@@ -118,6 +118,8 @@ if __name__ == "__main__":
     else:
         raise NotImplementedError(f"cfg.data.folder_structure: {cfg.data.folder_structure} doesn't exist. Use one of separate, unified.")
 
+    # try except keyboardinterrupt lets us save the model just before the program stops
+    # so that we do not lose the model weights in the current epoch.
     try:
         main(cfg)
     except KeyboardInterrupt:

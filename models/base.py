@@ -25,7 +25,7 @@ class BaseModel(nn.Module):
     def load_checkpoint(self, path, device="cuda"):
         ckpt_dict = torch.load(path, map_location=device)
         self.load_state_dict(ckpt_dict["model_state_dict"]) if "model_state_dict" in ckpt_dict else 0
-        self.optimizer.load_state_dict(ckpt_dict["optimizer_state_dict"]) if "optimizer_state_dict" in ckpt_dict else 0
+        # self.optimizer.load_state_dict(ckpt_dict["optimizer_state_dict"]) if "optimizer_state_dict" in ckpt_dict else 0
         print("loaded checkpoint:", path)
         return ckpt_dict["last_epoch"]
 
