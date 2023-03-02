@@ -41,12 +41,6 @@ def main(cfg):
         drop_last=True
     )
 
-    # get model
-    model = models.load(cfg)
-    model.to(cfg.training.device)
-    model.define_loss_function(getattr(losses, cfg.training.criterion)())
-    model.define_optimizer(cfg)
-
     model.train()
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(model.optimizer,
                                                            mode='min',
@@ -95,7 +89,13 @@ if __name__ == "__main__":
     # import config
     cfg = load_config("./config.yml")
 
-    # checkpoint
+    # get model
+    model = models.load(cfg)
+    model.to(cfg.training.device)
+    model.define_loss_function(getattr(losses, cfg.training.criterion)())
+    model.define_optimizer(cfg)
+
+    # define checkpoint
     checkpoint_dir = vars(cfg.model)
     checkpoint_dir = [f"{key}[{checkpoint_dir[key]}]" for key in checkpoint_dir]
     checkpoint_dir = "-".join(checkpoint_dir)
@@ -110,6 +110,7 @@ if __name__ == "__main__":
         last_epoch = 0
     shutil.copy("./config.yml", os.path.join(checkpoint_dir, "config.yml"))
 
+    # get dataloaders
     if cfg.data.folder_structure == "separate":
         from datasets.separate import get_transforms, get_dataloader
     elif cfg.data.folder_structure == "unified":
@@ -117,6 +118,8 @@ if __name__ == "__main__":
     else:
         raise NotImplementedError(f"cfg.data.folder_structure: {cfg.data.folder_structure} doesn't exist. Use one of separate, unified.")
 
+    # try except keyboardinterrupt lets us save the model just before the program stops
+    # so that we do not lose the model weights in the current epoch.
     try:
         main(cfg)
     except KeyboardInterrupt:
