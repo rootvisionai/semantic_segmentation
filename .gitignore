@@ -3,7 +3,7 @@
 *.png
 !inference_examples/*.png
 !fewshot_segmentation_inference.png
-!test_output/*.png
+!test_output/*.jpg
 *.zip
 *.tar
 *.pt
