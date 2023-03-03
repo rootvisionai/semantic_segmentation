@@ -39,6 +39,12 @@ training:
   device: "cuda"
   num_workers: 6
 
+inference:
+  device: "cpu"
+  out_size: [1024, 2800]
+
+
+
 # Guidance for models' configuration
 
 #  model = UNet(

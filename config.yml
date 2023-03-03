@@ -39,6 +39,13 @@ training:
   device: "cuda"
   num_workers: 6
 
+inference:
+  device: "cuda"
+  input_dir: "test_input"
+  output_dir: "test_output"
+
+
+
 # Guidance for models' configuration
 
 #  model = UNet(
