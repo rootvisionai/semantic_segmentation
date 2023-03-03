@@ -66,7 +66,7 @@ if __name__ == "__main__":
     for bs in range(preds.shape[0]):
         pred = preds[bs].unsqueeze(0)
         pred += 1
-        pred /= 10
+        pred /= (cfg.model.num_classes - 1)
         pred -= pred.min()
         pred = torch.nn.functional.interpolate(pred, size=out_sizes[bs])
 
