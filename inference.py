@@ -104,7 +104,7 @@ class Inference:
                 bbox_pts = instance.convert_to_bbox(polygon_pts)
                 rendered = instance.render_bbox(rendered, bbox_pts)
                 if len(polygon_pts)>0:
-                    save_dir = os.path.join(output_dir, f"{bs}_{ch}.png")
+                    save_dir = os.path.join(output_dir, f"{bs}_{ch}.jpg")
                     cv2.imwrite(save_dir, rendered)
 
             rendered_images.append(rendered)
