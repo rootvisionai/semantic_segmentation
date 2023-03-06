@@ -8,7 +8,7 @@ import shutil
 import sys
 
 import models
-from utils import load_config
+from utils import load_config, evaluate
 import losses
 
 model = None
@@ -78,6 +78,9 @@ def main(cfg):
                 mask /= 10
                 torchvision.utils.save_image(mask, "./inference_examples/mask.png")
                 model.train()
+
+                precision = evaluate(cfg, dl_ev, model, range=10)
+                print(f"PRECISION: {precision}")
 
             epoch_loss.append(loss)
 
