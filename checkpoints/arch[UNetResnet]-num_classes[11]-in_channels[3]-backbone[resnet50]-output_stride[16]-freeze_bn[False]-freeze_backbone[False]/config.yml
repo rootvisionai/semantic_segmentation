@@ -32,7 +32,7 @@ data:
 
 training:
   optimizer: "AdamW"
-  criterion: 'CrossEntropyDiceLoss' # CrossEntropyLoss2d | DiceLoss | FocalLoss | CrossEntropyDiceLoss
+  criterion: 'ContrastiveLoss' # CrossEntropyLoss2d | DiceLoss | FocalLoss | CrossEntropyDiceLoss
   epochs: 500
   batch_size: 16
   learning_rate: 0.0001

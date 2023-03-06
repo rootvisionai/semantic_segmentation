@@ -22,9 +22,9 @@ class BaseModel(nn.Module):
         nbr_params = sum([np.prod(p.size()) for p in model_parameters])
         return super(BaseModel, self).__str__() + f'\nNbr of trainable parameters: {nbr_params}'
 
-    def load_checkpoint(self, path, device="cuda"):
+    def load_checkpoint(self, path, device="cuda", strict=True):
         ckpt_dict = torch.load(path, map_location=device)
-        self.load_state_dict(ckpt_dict["model_state_dict"]) if "model_state_dict" in ckpt_dict else 0
+        self.load_state_dict(ckpt_dict["model_state_dict"], strict=strict) if "model_state_dict" in ckpt_dict else 0
         self.optimizer.load_state_dict(ckpt_dict["optimizer_state_dict"]) if "optimizer_state_dict" in ckpt_dict else 0
         print("loaded checkpoint:", path)
         return ckpt_dict["last_epoch"]

@@ -108,7 +108,7 @@ if __name__ == "__main__":
         os.makedirs(checkpoint_dir)
     checkpoint_path = os.path.join(checkpoint_dir, "ckpt.pth")
     if os.path.isfile(checkpoint_path):
-        last_epoch = model.load_checkpoint(checkpoint_path, device=cfg.training.device)
+        last_epoch = model.load_checkpoint(checkpoint_path, device=cfg.training.device, strict=False)
     else:
         last_epoch = 0
     shutil.copy("./config.yml", os.path.join(checkpoint_dir, "config.yml"))

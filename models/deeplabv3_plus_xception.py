@@ -982,8 +982,9 @@ class Decoder(nn.Module):
             nn.BatchNorm2d(256),
             nn.ReLU(inplace=True),
             nn.Dropout(0.1),
-            nn.Conv2d(256, num_classes, 1, stride=1),
+            nn.Conv2d(256, 256, 1, stride=1)
         )
+        self.outconv = nn.Conv2d(256, num_classes, 1, stride=1)
         initialize_weights(self)
 
     def forward(self, x, low_level_features):
@@ -992,7 +993,8 @@ class Decoder(nn.Module):
         H, W = low_level_features.size(2), low_level_features.size(3)
 
         x = F.interpolate(x, size=(H, W), mode='bilinear', align_corners=True)
-        x = self.output(torch.cat((low_level_features, x), dim=1))
+        self.latent = self.output(torch.cat((low_level_features, x), dim=1))
+        x = self.outconv(self.latent)
         return x
 
 '''

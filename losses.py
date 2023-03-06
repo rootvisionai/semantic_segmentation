@@ -6,6 +6,8 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 import torch.nn as nn
+from pytorch_metric_learning import miners, losses
+from einops import rearrange
 
 
 def make_one_hot(labels, classes):
@@ -77,3 +79,51 @@ class CrossEntropyDiceLoss(nn.Module):
         CE_loss = self.cross_entropy(output, target)
         dice_loss = self.dice(output, target)
         return CE_loss + dice_loss
+
+
+class MultiSimilarityLoss(torch.nn.Module):
+    def __init__(self, ):
+        super(MultiSimilarityLoss, self).__init__()
+        self.thresh = 0.5
+        self.epsilon = 0.1
+        self.scale_pos = 2
+        self.scale_neg = 50
+
+        self.miner = miners.MultiSimilarityMiner(epsilon=self.epsilon)
+        self.loss_func = losses.MultiSimilarityLoss(self.scale_pos, self.scale_neg, self.thresh)
+
+    def preprocess(self, pred, mask):
+        # pred: bs, c, h, w -> bs*h*w, c
+        pred = torch.nn.functional.interpolate(pred, size=(16, 16), mode="nearest")
+        mask = torch.nn.functional.interpolate(mask, size=(16, 16), mode="nearest")
+        pred = rearrange(pred, 'b c h w -> (b h w) c')
+        mask = rearrange(mask, 'b c h w -> (b h w) c')
+        mask = mask.argmax(dim=1)
+        return pred, mask
+
+    def forward(self, pred, mask):
+        pred, mask = self.preprocess(pred, mask)
+        hard_pairs = self.miner(pred, mask)
+        loss = self.loss_func(pred, mask, hard_pairs)
+        return loss
+
+
+class ContrastiveLoss(nn.Module):
+    def __init__(self, margin=0.5, **kwargs):
+        super(ContrastiveLoss, self).__init__()
+        self.margin = margin
+        self.loss_func = losses.ContrastiveLoss(neg_margin=self.margin, )
+
+    def preprocess(self, pred, mask):
+        # pred: bs, c, h, w -> bs*h*w, c
+        pred = torch.nn.functional.interpolate(pred, size=(16, 16), mode="nearest")
+        mask = torch.nn.functional.interpolate(mask, size=(16, 16), mode="nearest")
+        pred = rearrange(pred, 'b c h w -> (b h w) c')
+        mask = rearrange(mask, 'b c h w -> (b h w) c')
+        mask = mask.argmax(dim=1)
+        return pred, mask
+
+    def forward(self, pred, mask):
+        pred, mask = self.preprocess(pred, mask)
+        loss = self.loss_func(pred, mask)
+        return loss

@@ -98,9 +98,9 @@ class UNet(BaseModel):
         x = self.up1(x4, x)
         x = self.up2(x3, x)
         x = self.up3(x2, x)
-        x = self.up4(x1, x)
+        self.latent = self.up4(x1, x)
 
-        x = self.final_conv(x)
+        x = self.final_conv(self.latent)
         return x
 
     def get_backbone_params(self):
@@ -190,7 +190,8 @@ class UNetResnet(BaseModel):
         if x.size(2) != H or x.size(3) != W:
             x = F.interpolate(x, size=(H, W), mode="bilinear", align_corners=True)
 
-        x = self.conv7(self.conv6(x))
+        self.latent = self.conv6(x)
+        x = self.conv7(self.latent)
         return x
 
     def get_backbone_params(self):
