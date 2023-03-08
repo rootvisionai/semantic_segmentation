@@ -5,6 +5,8 @@ Run *python train.py* to start training
 
 The model checkpoints will be saved to *checkpoints/* folder
 
+- [Wood Defect Detection Checkpoint](https://drive.google.com/file/d/1b2c5Kw49kj_Q6yfjFgbltQyp2LsregD1/view?usp=share_link)
+
 ### Inference Examples from the Latest Training
 
 #### Image
